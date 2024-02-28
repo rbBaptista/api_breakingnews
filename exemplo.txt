@@ -1,0 +1,8 @@
+{
+  "name": "Rodolfo Baptista",
+  "userName": "bap",
+  "email": "rodolfo@gmail.com",
+  "password": "12345",
+  "avatar": "https://avatars.githubusercontent.com/u/140537500?v=4",
+  "background": "https://i.imgur.com/xHC23uY.jpg"
+}

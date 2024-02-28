@@ -1,9 +1,13 @@
 import { Router } from "express";
 
-import { hello } from "../controllers/user.controller.js";
+import { create, getAll, getById } from "../controllers/user.controller.js";
 
 const router = Router();
 
-router.get("/", hello);
+router.post("/", create);
+
+router.get("/", getAll);
+
+router.get("/:id", getById);
 
 export { router };
