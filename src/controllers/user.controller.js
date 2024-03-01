@@ -1,4 +1,4 @@
-import { createUser, findAllUsers, findUserById, updateUserById } from "../services/user.service.js";
+import { createUser, findAllUsers, findUserById, updateUserById, deleteUserById } from "../services/user.service.js";
 
 const create = async (req, res) => {
     try {
@@ -90,4 +90,20 @@ const updateById = async (req, res) => {
     }
 };
 
-export { create, getAll, getById, updateById };
+const deleteById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await deleteUserById(id);
+
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+
+        res.status(200).send({ message: "User deleted" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Internal server error" });
+    }
+};
+
+export { create, getAll, getById, updateById, deleteById };

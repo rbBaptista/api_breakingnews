@@ -1,8 +1,17 @@
 {
   "name": "Rodolfo Baptista",
-  "userName": "bap",
+  "userName": "Bap",
   "email": "rodolfo@gmail.com",
   "password": "12345",
   "avatar": "https://avatars.githubusercontent.com/u/140537500?v=4",
   "background": "https://i.imgur.com/xHC23uY.jpg"
 }
+
+  {
+    "_id": "65debfa27d4a454c50626004",
+    "name": "Fran Baptista",
+    "username": "Fran",
+    "email": "Fran@gmail.com",
+    "avatar": "https://avatars.githubusercontent.com/u/140537500?v=4",
+    "background": "https://i.imgur.com/xHC23uY.jpg"
+  }

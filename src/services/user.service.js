@@ -16,4 +16,8 @@ const updateUserById = (id, name, username, email, password, avatar, background)
     return User.findByIdAndUpdate({ _id: id }, { name, username, email, password, avatar, background }, { new: true });
 }
 
-export { createUser, findAllUsers, findUserById, updateUserById };
+const deleteUserById = (id) => {
+    return User.findByIdAndDelete(id);
+}
+
+export { createUser, findAllUsers, findUserById, updateUserById, deleteUserById };
