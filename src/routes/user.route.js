@@ -16,4 +16,4 @@ router.put("/:id", validateId, updateById);
 
 router.delete("/:id", validateId, deleteById);
 
-export { router };
+export default router;
