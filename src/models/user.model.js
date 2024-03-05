@@ -1,7 +1,7 @@
-import moongoose from 'mongoose';
+import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
-const userSchema = new moongoose.Schema({
+const UserSchema = new mongoose.Schema({
     name: { type: String, required: true,},
     username: { type: String, required: true, unique: true},
     email: { type: String, required: true, unique: true},
@@ -10,13 +10,13 @@ const userSchema = new moongoose.Schema({
     background: { type: String, required: true },
 });
 
-userSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function (next) {
     const hash = await bcrypt.hash(this.password, 10);
     this.password = hash;
 
     next();
 });
 
-const User = moongoose.model('user', userSchema);
+const User = mongoose.model('User', UserSchema);
 
 export default User;

@@ -5,6 +5,7 @@ import cors from "cors";
 
 import userRoute from "./src/routes/user.route.js";
 import authRoute from "./src/routes/auth.route.js";
+import newsRoute from "./src/routes/news.route.js";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use("/user", userRoute);
 
 app.use("/auth", authRoute);
+
+app.use("/news", newsRoute);
 
 app.use((_, res) => {
     res.status(404).send('Sorry, we cannot find that!');

@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { create, getAll, getById, updateById, deleteById } from "../controllers/user.controller.js";
 
-import { validateId } from "../middlewares/global.middlewares.js";
+import { validateId } from "../middlewares/global.middleware.js";
 
 const router = Router();
 

@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import User from "../models/User.model.js";
 
 const createUser = (body) => {
     return User.create(body);
