@@ -14,6 +14,6 @@ router.get("/:id", validateId, getById);
 
 router.put("/:id", validateId, updateById);
 
-router.delete("/:id", validateId, deleteById);
+// router.delete("/:id", validateId, deleteById);
 
 export default router;
