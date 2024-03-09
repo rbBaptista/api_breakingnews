@@ -1,6 +1,6 @@
-import { createNews, findAllNews, countNews, findLastNews, findNewsById, findNewsByTitle, findNewsByMyUserId } from "../services/news.service.js";
+import { create, findAll, count, findLast, findById, findByTitle, findByUserId, updateByUserId, deleteById, addLike, removeLike, addComment, removeComment } from "../services/news.service.js";
 
-const create = async (req, res) => {
+const createNews = async (req, res) => {
     try {
         const { title, text, banner } = req.body;
         const userId = req.userId;
@@ -11,7 +11,7 @@ const create = async (req, res) => {
 
         req.body.user = userId;
 
-        const news = await createNews(req.body);
+        const news = await create(req.body);
 
         if (!news) {
             return res.status(500).send({ message: "Error creating news" });
@@ -34,7 +34,7 @@ const create = async (req, res) => {
     }
 }
 
-const getAll = async (req, res) => {
+const getAllNews = async (req, res) => {
 
     let { limit, offset } = req.query;
 
@@ -42,8 +42,8 @@ const getAll = async (req, res) => {
     offset = Number(offset) || 0;
 
     try {
-        const news = await findAllNews(offset, limit);
-        const total = await countNews();
+        const news = await findAll(offset, limit);
+        const total = await count();
         const currentUrl = req.baseUrl;
         console.log(currentUrl, total);
 
@@ -63,7 +63,7 @@ const getAll = async (req, res) => {
 
 const getLastNews = async (req, res) => {
     try {
-        const news = await findLastNews();
+        const news = await findLast();
 
         if (!news) {
             return res.status(500).send({ message: "Error fetching news" });
@@ -79,7 +79,7 @@ const getLastNews = async (req, res) => {
 const getNewsById = async (req, res) => {
     try {
         const { id } = req.params;
-        const news = await findNewsById(id);
+        const news = await findById(id);
 
         if (!news) {
             return res.status(404).send({ message: "News not found" });
@@ -95,7 +95,7 @@ const getNewsById = async (req, res) => {
 const getNewsByTitle = async (req, res) => {
     try {
         const { title } = req.query;
-        const news = await findNewsByTitle(title);
+        const news = await findByTitle(title);
         console.log(title);
 
         if (!news) {
@@ -109,10 +109,10 @@ const getNewsByTitle = async (req, res) => {
     }
 }
 
-const getNewsByMyUserId = async (req, res) => {
+const getNewsByUserId = async (req, res) => {
     try {
         const userId = req.userId;
-        const news = await findNewsByMyUserId(userId);
+        const news = await findByUserId(userId);
 
         if (!news) {
             return res.status(404).send({ message: "News not found" });
@@ -125,4 +125,140 @@ const getNewsByMyUserId = async (req, res) => {
     }
 }
 
-export { create, getAll, getLastNews, getNewsById, getNewsByTitle, getNewsByMyUserId };
+const updateNews = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, text, banner } = req.body;
+        const userId = req.userId;
+
+
+        if (!id && !title && !text && !banner) {
+            return res.status(400).send({ message: "All fields are required" });
+        }
+
+        const news = await updateByUserId(id, title, text, banner);
+
+        if (userId != news.user.toString()) {
+            return res.status(401).send({ message: "Unauthorized" });
+        }
+
+        if (!news) {
+            return res.status(500).send({ message: "Error updating news" });
+        }
+
+        res.status(200).send({
+            message: "News updated",
+            news: {
+                userName: req.userName,
+                id: news._id,
+                title,
+                text,
+                banner
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
+
+const deleteNews = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.userId;
+
+        const news = await deleteById(id);
+
+        if (userId != news.user.toString()) {
+            return res.status(401).send({ message: "Unauthorized" });
+        }
+
+        if (!news) {
+            return res.status(500).send({ message: "Error deleting news" });
+        }
+
+        res.status(200).send({ message: "News deleted" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
+
+const updateNewsLikes = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.userId;
+
+        let news = await findById(id);
+
+        if (!news) {
+            return res.status(404).send({ message: "News not found" });
+        }
+
+        if (news.usersLiked.includes(userId)) {
+            news = await removeNewsLike(id, userId);
+            return res.status(400).send({ message: "Like removed" });
+        }
+
+        news = await addNewsLike(id, userId);
+
+        if (!news) {
+            return res.status(500).send({ message: "Error updating news" });
+        }
+
+        res.status(200).send({ message: "News updated +1 like" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
+
+const updateNewsComment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.userId;
+        const { comment } = req.body;
+
+        let news = await findById(id);
+
+        if (!news) {
+            return res.status(404).send({ message: "News not found" });
+        }
+
+        news = await addNewsComment(id, userId, comment);
+
+        if (!news) {
+            return res.status(500).send({ message: "Error updating news" });
+        }
+
+        res.status(200).send({ message: "Comment added" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
+
+const deleteNewsComment = async (req, res) => {
+    try {
+        const { id, commentId } = req.params;
+
+        let news = await findById(id);
+
+        if (!news) {
+            return res.status(404).send({ message: "News not found" });
+        }
+
+        news = await removeNewsComment(id, commentId);
+
+        if (!news) {
+            return res.status(500).send({ message: "Error updating news" });
+        }
+
+        res.status(200).send({ message: "Comment removed" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Internal server error" });
+    }
+}
+
+export { createNews, getAllNews, getLastNews, getNewsById, getNewsByTitle, getNewsByUserId, updateNews, deleteNews, updateNewsLikes, updateNewsComment, deleteNewsComment };

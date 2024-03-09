@@ -1,6 +1,6 @@
-import { createUser, findAllUsers, findUserById, updateUserById, deleteUserById } from "../services/user.service.js";
+import { create, findAll, findById, updateById, deleteById } from "../services/user.service.js";
 
-const create = async (req, res) => {
+const createUser = async (req, res) => {
     try {
         const { name, username, email, password, avatar, background } = req.body;
 
@@ -9,10 +9,10 @@ const create = async (req, res) => {
             return res.status(400).send({ message: "All fields are required" });
         }
 
-        const user = await createUser(req.body);
+        const user = await create(req.body);
 
         if (!user) {
-            return res.status(500).send({ message: "Error creating user" });
+            return res.status(500).send({ message: "Error creating user", });
         }
 
         res.status(201).send({
@@ -28,13 +28,13 @@ const create = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).send({ message: "Internal server error" });
+        res.status(500).send({ message: error.message }); //
     }
 };
 
-const getAll = async (req, res) => {
+const getAllUser = async (_, res) => {
     try {
-        const users = await findAllUsers();
+        const users = await findAll();
 
         if (!users) {
             return res.status(500).send({ message: "Error fetching users" });
@@ -47,10 +47,10 @@ const getAll = async (req, res) => {
     }
 };
 
-const getById = async (req, res) => {
+const getByUserId = async (req, res) => {
     try {
         const { id } = req.params;
-        const user = await findUserById(id);
+        const user = await findById(id);
 
         if (!user) {
             return res.status(404).send({ message: "User not found" });
@@ -63,11 +63,11 @@ const getById = async (req, res) => {
     }
 };
 
-const updateById = async (req, res) => {
+const updateByUserId = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, username, email, password, avatar, background } = req.body;
-        const user = await updateUserById(id, name, username, email, password, avatar, background);
+        const user = await updateById(id, name, username, email, password, avatar, background);
 
         if (!user) {
             return res.status(404).send({ message: "User not found" });
@@ -90,10 +90,10 @@ const updateById = async (req, res) => {
     }
 };
 
-const deleteById = async (req, res) => {
+const deleteByUserId = async (req, res) => {
     try {
         const { id } = req.params;
-        const user = await deleteUserById(id);
+        const user = await deleteById(id);
 
         if (!user) {
             return res.status(404).send({ message: "User not found" });
@@ -106,4 +106,4 @@ const deleteById = async (req, res) => {
     }
 };
 
-export { create, getAll, getById, updateById, deleteById };
+export { createUser, getAllUser, getByUserId, updateByUserId, deleteByUserId };

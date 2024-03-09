@@ -7,7 +7,7 @@ const findUserByEmail = (email) => {
 
 const generateToken = (id) => {
     console.log(id);
-    return jwt.sign({id: id}, process.env.JWT_SECRET, { expiresIn: "1d" });
+    return jwt.sign({ id: id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
 export { findUserByEmail, generateToken };

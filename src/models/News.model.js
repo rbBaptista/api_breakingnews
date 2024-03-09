@@ -6,9 +6,10 @@ const NewsSchema = new mongoose.Schema({
     banner: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-    likes: {type: Array, required: true, default: []},
-    comments: {type: Array, required: true, default: []},
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    likes: { type: Number, default: 0 },
+    usersLiked: { type: Array, required: true, default: [] },
+    comments: { type: Array, required: true, default: [] },
 });
 
 const News = mongoose.model('News', NewsSchema);

@@ -17,12 +17,12 @@ const login = async (req, res) => {
         }
 
         const token = generateToken(user._id);
-        
-        res.status(200).send({ message: "User logged in", token: token});
+
+        res.status(200).send({ message: "User logged in", token: token });
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}; 
+};
 
 export { login };

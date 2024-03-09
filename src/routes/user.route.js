@@ -1,19 +1,19 @@
 import { Router } from "express";
 
-import { create, getAll, getById, updateById, deleteById } from "../controllers/user.controller.js";
+import { createUser, getAllUser, getByUserId, updateByUserId, deleteByUserId } from "../controllers/user.controller.js";
 
 import { validateId } from "../middlewares/global.middleware.js";
 
 const router = Router();
 
-router.post("/", create);
+router.post("/", createUser);
 
-router.get("/", getAll);
+router.get("/", getAllUser);
 
-router.get("/:id", validateId, getById);
+router.get("/:id", validateId, getByUserId);
 
-router.put("/:id", validateId, updateById);
+router.patch("/:id", validateId, updateByUserId);
 
-// router.delete("/:id", validateId, deleteById);
+router.delete("/:id", validateId, deleteByUserId);
 
 export default router;
