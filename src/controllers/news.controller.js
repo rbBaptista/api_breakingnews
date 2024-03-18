@@ -196,17 +196,17 @@ const updateNewsLikes = async (req, res) => {
         }
 
         if (news.usersLiked.includes(userId)) {
-            news = await removeNewsLike(id, userId);
+            news = await removeLike(id, userId);
             return res.status(400).send({ message: "Like removed" });
         }
 
-        news = await addNewsLike(id, userId);
+        news = await addLike(id, userId);
 
         if (!news) {
             return res.status(500).send({ message: "Error updating news" });
         }
 
-        res.status(200).send({ message: "News updated +1 like" });
+        res.status(200).send({ message: "News updated, +1 like" });
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
@@ -225,7 +225,7 @@ const updateNewsComment = async (req, res) => {
             return res.status(404).send({ message: "News not found" });
         }
 
-        news = await addNewsComment(id, userId, comment);
+        news = await addComment(id, userId, comment);
 
         if (!news) {
             return res.status(500).send({ message: "Error updating news" });
@@ -248,7 +248,7 @@ const deleteNewsComment = async (req, res) => {
             return res.status(404).send({ message: "News not found" });
         }
 
-        news = await removeNewsComment(id, commentId);
+        news = await removeComment(id, commentId);
 
         if (!news) {
             return res.status(500).send({ message: "Error updating news" });
