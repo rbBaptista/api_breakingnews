@@ -1,6 +1,18 @@
 import Router from "express";
 
-import { createNews, getAllNews, getLastNews, getNewsById, getNewsByTitle, getNewsByUserId, updateNews, deleteNews, updateNewsLikes, updateNewsComment, deleteNewsComment } from "../controllers/news.controller.js";
+import {
+    createNews,
+    getAllNews,
+    getLastNews,
+    getNewsById,
+    getNewsByTitle,
+    getNewsByUserId,
+    updateNews,
+    deleteNews,
+    updateNewsLikes,
+    updateNewsComment,
+    deleteNewsComment,
+} from "../controllers/news.controller.js";
 
 import { validateId } from "../middlewares/global.middleware.js";
 

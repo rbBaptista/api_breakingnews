@@ -1,12 +1,14 @@
-import jwt from 'jsonwebtoken';
-import { findById } from '../services/user.service.js';
+import jwt from "jsonwebtoken";
+import { findById } from "../services/user.service.js";
 
 const authmiddleware = async (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader?.split(' ')[1];
+    const authHeader = req.headers.authorization; //
+    const token = authHeader?.split(" ")[1];
 
     if (!token) {
-        return res.status(401).json({ message: 'Access denied. No token provided.' });
+        return res
+            .status(401)
+            .json({ message: "Access denied. No token provided." });
     }
 
     try {
@@ -16,7 +18,7 @@ const authmiddleware = async (req, res, next) => {
         req.userName = user.username;
         return next();
     } catch (ex) {
-        res.status(400).json({ message: 'Invalid token.' });
+        res.status(400).json({ message: "Invalid token." });
     }
 };
 

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const validateId = (req, res, next) => {
     try {
@@ -10,7 +10,9 @@ const validateId = (req, res, next) => {
 
         next();
     } catch (error) {
-        return res.status(500).send({ message: "An error occurred", error: error.message });
+        return res
+            .status(500)
+            .send({ message: "An error occurred", error: error.message });
     }
 };
 

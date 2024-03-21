@@ -1,17 +1,34 @@
-import { create, findAll, count, findLast, findById, findByTitle, findByUserId, updateByUserId, deleteById, addLike, removeLike, addComment, removeComment } from "../services/news.service.js";
+import {
+    create,
+    findAll,
+    count,
+    findLast,
+    findById,
+    findByTitle,
+    findByUserId,
+    updateByUserId,
+    deleteById,
+    addLike,
+    removeLike,
+    addComment,
+    removeComment,
+} from "../services/news.service.js";
 
 const createNews = async (req, res) => {
     try {
         const { title, text, banner } = req.body;
         const userId = req.userId;
+        console.log(userId);
 
         if (!title || !text || !banner) {
             return res.status(400).send({ message: "All fields are required" });
         }
 
-        req.body.user = userId;
+        req.body.userId = userId; // Changed from 'user'
 
         const news = await create(req.body);
+
+        console.log(news);
 
         if (!news) {
             return res.status(500).send({ message: "Error creating news" });
@@ -22,20 +39,19 @@ const createNews = async (req, res) => {
             news: {
                 userName: req.userName,
                 id: news._id,
-                userid: news.user,
+                userId: news.userId, // Changed from 'userid: news.user'
                 title,
                 text,
-                banner
-            }
+                banner,
+            },
         });
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const getAllNews = async (req, res) => {
-
     let { limit, offset } = req.query;
 
     limit = Number(limit) || 2;
@@ -47,19 +63,32 @@ const getAllNews = async (req, res) => {
         const currentUrl = req.baseUrl;
         console.log(currentUrl, total);
 
-        const nextUrl = offset + limit < total ? `${currentUrl}?limit=${limit}&offset=${offset + limit}` : null;
-        const previousUrl = offset > 0 ? `${currentUrl}?limit=${limit}&offset=${offset - limit}` : null;
+        const nextUrl =
+            offset + limit < total
+                ? `${currentUrl}?limit=${limit}&offset=${offset + limit}`
+                : null;
+        const previousUrl =
+            offset > 0
+                ? `${currentUrl}?limit=${limit}&offset=${offset - limit}`
+                : null;
 
         if (!news) {
             return res.status(500).send({ message: "Error fetching news" });
         }
 
-        res.status(200).send({ nextUrl, previousUrl, limit, offset, total, news });
+        res.status(200).send({
+            nextUrl,
+            previousUrl,
+            limit,
+            offset,
+            total,
+            news,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const getLastNews = async (req, res) => {
     try {
@@ -74,7 +103,7 @@ const getLastNews = async (req, res) => {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const getNewsById = async (req, res) => {
     try {
@@ -90,7 +119,7 @@ const getNewsById = async (req, res) => {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const getNewsByTitle = async (req, res) => {
     try {
@@ -107,7 +136,7 @@ const getNewsByTitle = async (req, res) => {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const getNewsByUserId = async (req, res) => {
     try {
@@ -123,7 +152,7 @@ const getNewsByUserId = async (req, res) => {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const updateNews = async (req, res) => {
     try {
@@ -131,14 +160,13 @@ const updateNews = async (req, res) => {
         const { title, text, banner } = req.body;
         const userId = req.userId;
 
-
         if (!id && !title && !text && !banner) {
             return res.status(400).send({ message: "All fields are required" });
         }
 
         const news = await updateByUserId(id, title, text, banner);
 
-        if (userId != news.user.toString()) {
+        if (userId !== news.user.toString()) {
             return res.status(401).send({ message: "Unauthorized" });
         }
 
@@ -153,14 +181,14 @@ const updateNews = async (req, res) => {
                 id: news._id,
                 title,
                 text,
-                banner
-            }
+                banner,
+            },
         });
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const deleteNews = async (req, res) => {
     try {
@@ -169,7 +197,7 @@ const deleteNews = async (req, res) => {
 
         const news = await deleteById(id);
 
-        if (userId != news.user.toString()) {
+        if (userId !== news.user.toString()) {
             return res.status(401).send({ message: "Unauthorized" });
         }
 
@@ -182,7 +210,7 @@ const deleteNews = async (req, res) => {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const updateNewsLikes = async (req, res) => {
     try {
@@ -211,7 +239,7 @@ const updateNewsLikes = async (req, res) => {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const updateNewsComment = async (req, res) => {
     try {
@@ -236,7 +264,7 @@ const updateNewsComment = async (req, res) => {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
 const deleteNewsComment = async (req, res) => {
     try {
@@ -259,6 +287,18 @@ const deleteNewsComment = async (req, res) => {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
     }
-}
+};
 
-export { createNews, getAllNews, getLastNews, getNewsById, getNewsByTitle, getNewsByUserId, updateNews, deleteNews, updateNewsLikes, updateNewsComment, deleteNewsComment };
+export {
+    createNews,
+    getAllNews,
+    getLastNews,
+    getNewsById,
+    getNewsByTitle,
+    getNewsByUserId,
+    updateNews,
+    deleteNews,
+    updateNewsLikes,
+    updateNewsComment,
+    deleteNewsComment,
+};

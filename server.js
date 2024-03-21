@@ -23,7 +23,7 @@ app.use("/auth", authRoute);
 app.use("/news", newsRoute);
 
 app.use((_, res) => {
-    res.status(404).send('Sorry, we cannot find that!');
+    res.status(404).send("Sorry, we cannot find that!");
 });
 
 const startServer = async () => {
@@ -33,7 +33,7 @@ const startServer = async () => {
             console.log(`Server is running at http://localhost:${PORT}`);
         });
     } catch (error) {
-        console.error('Error... Server not connected:', error);
+        console.error("Error... Server not connected:", error);
     }
 };
 

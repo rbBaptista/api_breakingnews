@@ -1,10 +1,24 @@
-import { create, findAll, findById, updateById, deleteById } from "../services/user.service.js";
+import {
+    create,
+    findAll,
+    findById,
+    updateById,
+    deleteById,
+} from "../services/user.service.js";
 
 const createUser = async (req, res) => {
     try {
-        const { name, username, email, password, avatar, background } = req.body;
+        const { name, username, email, password, avatar, background } =
+            req.body;
 
-        if (!name || !username || !email || !password || !avatar || !background) {
+        if (
+            !name ||
+            !username ||
+            !email ||
+            !password ||
+            !avatar ||
+            !background
+        ) {
             console.log(req.body);
             return res.status(400).send({ message: "All fields are required" });
         }
@@ -12,7 +26,7 @@ const createUser = async (req, res) => {
         const user = await create(req.body);
 
         if (!user) {
-            return res.status(500).send({ message: "Error creating user", });
+            return res.status(500).send({ message: "Error creating user" });
         }
 
         res.status(201).send({
@@ -23,8 +37,8 @@ const createUser = async (req, res) => {
                 username,
                 email,
                 avatar,
-                background
-            }
+                background,
+            },
         });
     } catch (error) {
         console.error(error);
@@ -66,8 +80,17 @@ const getByUserId = async (req, res) => {
 const updateByUserId = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, username, email, password, avatar, background } = req.body;
-        const user = await updateById(id, name, username, email, password, avatar, background);
+        const { name, username, email, password, avatar, background } =
+            req.body;
+        const user = await updateById(
+            id,
+            name,
+            username,
+            email,
+            password,
+            avatar,
+            background,
+        );
 
         if (!user) {
             return res.status(404).send({ message: "User not found" });
@@ -81,8 +104,8 @@ const updateByUserId = async (req, res) => {
                 username,
                 email,
                 avatar,
-                background
-            }
+                background,
+            },
         });
     } catch (error) {
         console.error(error);
