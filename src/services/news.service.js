@@ -10,7 +10,7 @@ const findAll = (offset, limit) => {
         .sort({ createdAt: -1 })
         .skip(offset)
         .limit(limit)
-        .populate("user", "name email");
+        .populate("userId", "name email");
 };
 
 const count = () => {
@@ -18,7 +18,10 @@ const count = () => {
 };
 
 const findLast = () => {
-    return News.find().sort({ createdAt: -1 }).limit(1);
+    return News.find()
+        .sort({ createdAt: -1 })
+        .limit(1)
+        .populate("userId", "name email username");
 };
 
 const findById = (id) => {
