@@ -16,11 +16,11 @@ import {
 
 const createNews = async (req, res) => {
     try {
-        const { title, text, banner } = req.body;
+        const { title, text, image } = req.body;
         const userId = req.userId;
         console.log(userId);
 
-        if (!title || !text || !banner) {
+        if (!title || !text || !image) {
             return res.status(400).send({ message: "All fields are required" });
         }
 
@@ -42,7 +42,7 @@ const createNews = async (req, res) => {
                 userId: news.userId, // Changed from 'userid: news.user'
                 title,
                 text,
-                banner,
+                image,
             },
         });
     } catch (error) {
@@ -54,7 +54,7 @@ const createNews = async (req, res) => {
 const getAllNews = async (req, res) => {
     let { limit, offset } = req.query;
 
-    limit = Number(limit) || 2;
+    limit = Number(limit) || 8;
     offset = Number(offset) || 0;
 
     try {
@@ -157,14 +157,14 @@ const getNewsByUserId = async (req, res) => {
 const updateNews = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, text, banner } = req.body;
+        const { title, text, image } = req.body;
         const userId = req.userId;
 
-        if (!id && !title && !text && !banner) {
+        if (!id && !title && !text && !image) {
             return res.status(400).send({ message: "All fields are required" });
         }
 
-        const news = await updateByUserId(id, title, text, banner);
+        const news = await updateByUserId(id, title, text, image);
 
         if (userId !== news.user.toString()) {
             return res.status(401).send({ message: "Unauthorized" });
@@ -181,7 +181,7 @@ const updateNews = async (req, res) => {
                 id: news._id,
                 title,
                 text,
-                banner,
+                image,
             },
         });
     } catch (error) {

@@ -38,10 +38,10 @@ const findByUserId = (userId) => {
     return News.find({ user: userId }).populate("user", "name email");
 };
 
-const updateByUserId = (id, title, text, banner) => {
+const updateByUserId = (id, title, text, image) => {
     return News.findByIdAndUpdate(
         { _id: id },
-        { title, text, banner, updatedAt: Date.now() },
+        { title, text, image, updatedAt: Date.now() },
         { new: true },
     );
 };
