@@ -5,20 +5,14 @@ import {
     updateById,
     deleteById,
 } from "../services/user.service.js";
+import { generateToken } from "../services/auth.service.js";
 
 const createUser = async (req, res) => {
     try {
         const { name, username, email, password, avatar, background } =
             req.body;
 
-        if (
-            !name ||
-            !username ||
-            !email ||
-            !password ||
-            !avatar ||
-            !background
-        ) {
+        if (!name || !username || !email || !password) {
             console.log(req.body);
             return res.status(400).send({ message: "All fields are required" });
         }
@@ -29,8 +23,11 @@ const createUser = async (req, res) => {
             return res.status(500).send({ message: "Error creating user" });
         }
 
+        const token = generateToken(user._id);
+
         res.status(201).send({
             message: "User created",
+            token,
             user: {
                 id: user._id,
                 name,
