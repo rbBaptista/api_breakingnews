@@ -18,17 +18,14 @@ const createNews = async (req, res) => {
     try {
         const { title, text, image } = req.body;
         const userId = req.userId;
-        console.log(userId);
 
         if (!title || !text || !image) {
             return res.status(400).send({ message: "All fields are required" });
         }
 
-        req.body.userId = userId; // Changed from 'user'
+        req.body.userId = userId;
 
         const news = await create(req.body);
-
-        console.log(news);
 
         if (!news) {
             return res.status(500).send({ message: "Error creating news" });
@@ -61,7 +58,6 @@ const getAllNews = async (req, res) => {
         const news = await findAll(offset, limit);
         const total = await count();
         const currentUrl = req.baseUrl;
-        console.log(currentUrl, total);
 
         const nextUrl =
             offset + limit < total

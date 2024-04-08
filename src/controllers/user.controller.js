@@ -13,7 +13,6 @@ const createUser = async (req, res) => {
             req.body;
 
         if (!name || !username || !email || !password) {
-            console.log(req.body);
             return res.status(400).send({ message: "All fields are required" });
         }
 
@@ -23,7 +22,7 @@ const createUser = async (req, res) => {
             return res.status(500).send({ message: "Error creating user" });
         }
 
-        const token = generateToken(user._id);
+        const token = generateToken(user.id);
 
         res.status(201).send({
             message: "User created",
@@ -37,6 +36,8 @@ const createUser = async (req, res) => {
                 background,
             },
         });
+
+        return token;
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: error.message }); //
