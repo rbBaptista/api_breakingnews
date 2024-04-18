@@ -138,6 +138,7 @@ const getNewsByUserId = async (req, res) => {
     try {
         const userId = req.userId;
         const news = await findByUserId(userId);
+        console.log(userId);
 
         if (!news) {
             return res.status(404).send({ message: "News not found" });

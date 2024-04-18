@@ -35,7 +35,8 @@ const findByTitle = (title) => {
 };
 
 const findByUserId = (userId) => {
-    return News.find({ user: userId }).populate("user", "name email");
+    console.log(userId);
+    return News.find({ userId });
 };
 
 const updateByUserId = (id, title, text, image) => {
