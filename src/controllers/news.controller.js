@@ -192,17 +192,28 @@ const deleteNews = async (req, res) => {
         const { id } = req.params;
         const userId = req.userId;
 
-        const news = await deleteById(id);
+        console.log(id, userId);
 
-        if (userId !== news.user.toString()) {
-            return res.status(401).send({ message: "Unauthorized" });
-        }
+        // Find news by ID first without deleting
+        // const news = await findById(id);
+        //
+        // console.log(news)
 
-        if (!news) {
-            return res.status(500).send({ message: "Error deleting news" });
-        }
+        // // Check if news exist
+        // if (!news) {
+        //     return res.status(404).send({ message: "News not found" });
+        // }
+        //
+        // // Check user authorization
+        // if (userId !== news.user.toString()) {
+        //     return res.status(401).send({ message: "Unauthorized"});
+        // }
+
+        // Delete the news
+        await deleteById(id);
 
         res.status(200).send({ message: "News deleted" });
+
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Internal server error" });
